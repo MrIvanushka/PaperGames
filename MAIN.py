@@ -1,26 +1,28 @@
 import tkinter
 import ImageManager
-import MainMenu
+from MainMenu import Instance as mainMenu
+from MainMenu import currentGame
+# собсна главный скрипт: инициализация окна и вызов команд обновления классов
 
+#----------------------------------------------функции------------------------------------------------------------------
 
-def draw_title(_canvas):
-    _canvas.create_image(0, 0, anchor="nw", image=ImageManager.title[0])
-    r = _canvas.create_image(175, 420, anchor="nw", image=ImageManager.playButton[0])
-    _canvas.tag_bind(r, '<Button-1>', lambda event: print('works'))
+def close_window():
+    #функция для отслеживания закрытия приложухи
+    running = False
 
-
-def open_menu():
-    pass
+#-----------------------------------------инициализация окна------------------------------------------------------------
 
 
 window = tkinter.Tk()
 ImageManager.init()
-currentGame = MainMenu.Instance
-
+window.protocol("WM_DELETE_WINDOW", close_window)
+running = True
 canvas = tkinter.Canvas(window, width=800, height=600)
 canvas.pack()
-draw_title(canvas)
+mainMenu.Start(canvas)
 
-
+#----------------------------------------покадровая обработка-----------------------------------------------------------
 
 window.mainloop()
+while running:
+    currentGame.Update(canvas)

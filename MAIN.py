@@ -1,28 +1,31 @@
-import tkinter
-import ImageManager
+from kivy.app import App
+from kivy.uix.widget import Widget
+from kivy.core.window import Window
+from kivy.clock import Clock
 from MainMenu import Instance as mainMenu
 from MainMenu import currentGame
 # собсна главный скрипт: инициализация окна и вызов команд обновления классов
 
-#----------------------------------------------функции------------------------------------------------------------------
+#---------------------------------------классы и наследование-----------------------------------------------------------
 
-def close_window():
-    #функция для отслеживания закрытия приложухи
-    running = False
+
+class BaseApp(App):
+    def build(self):
+        self.canvas = Widget()
+        mainMenu.Start(self.canvas)
+        Clock.schedule_interval(self.update, 0.01)
+        return self.canvas
+
+    def update(self, *args):
+        currentGame.Update(self.root)
+        Clock.unschedule(self.update)
+        Clock.schedule_interval(self.update, 0.01)
+
 
 #-----------------------------------------инициализация окна------------------------------------------------------------
 
 
-window = tkinter.Tk()
-ImageManager.init()
-window.protocol("WM_DELETE_WINDOW", close_window)
-running = True
-canvas = tkinter.Canvas(window, width=800, height=600)
-canvas.pack()
-mainMenu.Start(canvas)
-
-#----------------------------------------покадровая обработка-----------------------------------------------------------
-
-window.mainloop()
-while running:
-    currentGame.Update(canvas)
+Window.size = (800, 600)
+ThisApp = BaseApp()
+ThisApp.run()
+ThisApp.update()

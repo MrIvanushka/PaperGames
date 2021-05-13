@@ -8,7 +8,6 @@ from MainMenu import currentGame
 
 #---------------------------------------классы и наследование-----------------------------------------------------------
 
-
 class BaseApp(App):
     def build(self):
         self.canvas = Widget()

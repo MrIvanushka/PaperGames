@@ -2,15 +2,33 @@ from kivy.uix.image import AsyncImage
 from kivy.uix.button import Button
 # хранилище изображений
 
+def create_button(canvas, gfx, pos):
+    play_button = Button()
+    play_button.size = gfx.size
+    play_button.background_color = (1, 1, 1, 0)
+    canvas.add_widget(play_button)
+    canvas.add_widget(gfx)
+    play_button.pos = gfx.pos = pos
+    return play_button
+
 title = AsyncImage(source='Images/title.png')
 title.size = (800, 600)
 
-play_button = Button()
 play_button_gfx = AsyncImage(source='Images/playButton.png')
-play_button_gfx.size = play_button.size = (300, 100)
-play_button.add_widget(play_button_gfx)
-play_button.background_color = (0, 0, 0, 0)
-
+play_button_gfx.size = (300, 100)
 
 background = AsyncImage(source='Images/Background.png')
 background.size = (800, 600)
+
+viselitsa_start_text = AsyncImage(source='Images/viselitsaStarttext.png')
+viselitsa_start_text.size = (600, 400)
+
+menu_page = [AsyncImage(source='Images/viselPage.png'),
+             AsyncImage(source='Images/ballsPage.png'),
+             AsyncImage(source='Images/pushkaPage.png'),
+             AsyncImage(source='Images/starPage.png')]
+for page in menu_page:
+    page.size = (800, 600)
+
+left_arrow = Button()
+left_arrow_gfx = AsyncImage(source='Images/leftarrow.png')

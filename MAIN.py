@@ -4,6 +4,7 @@ from kivy.core.window import Window
 from kivy.clock import Clock
 from MainMenu import Instance as mainMenu
 from MainMenu import currentGame
+import Templates
 # собсна главный скрипт: инициализация окна и вызов команд обновления классов
 
 #---------------------------------------классы и наследование-----------------------------------------------------------
@@ -17,12 +18,15 @@ class BaseApp(App):
 
     def update(self, *args):
         currentGame.Update(self.root)
+        if Templates.try_to_exit == True:
+            Templates.try_to_exit = False
+            print("Exit successful")
+            mainMenu.Start(self.canvas)
         Clock.unschedule(self.update)
         Clock.schedule_interval(self.update, 0.01)
 
 
 #-----------------------------------------инициализация окна------------------------------------------------------------
-
 
 Window.size = (800, 600)
 ThisApp = BaseApp()

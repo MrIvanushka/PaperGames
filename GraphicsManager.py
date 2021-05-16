@@ -11,6 +11,16 @@ def create_button(canvas, gfx, pos):
     play_button.pos = gfx.pos = pos
     return play_button
 
+exit_button_gfx = AsyncImage(source='Images/EXITBUTTON.png')
+def create_exit_button(canvas, func):
+    exit_button = Button()
+    exit_button.size = exit_button_gfx.size = (100, 50)
+    exit_button.background_color = (1, 1, 1, 0)
+    canvas.add_widget(exit_button)
+    canvas.add_widget(exit_button_gfx)
+    exit_button.pos = exit_button_gfx.pos = (10,540)
+    exit_button.bind(on_press=func)
+
 title = AsyncImage(source='Images/title.png')
 title.size = (800, 600)
 

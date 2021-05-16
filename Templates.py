@@ -1,7 +1,9 @@
 # Родительский класс для всяких там игр которые включаем.
 
+try_to_exit = False
+
 class game:
-    def __Init__(self):
+    def __init__(self):
         self.paused = False
         self.try_to_exit = False
 
@@ -19,6 +21,9 @@ class game:
         # метод для выхода из игры, активируется кнопкой
         background.clear_widgets()
         canvas.clear_widgets()
-        self.try_to_exit = True
+        global try_to_exit
+        try_to_exit = True
+
+
 
 

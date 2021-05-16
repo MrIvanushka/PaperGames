@@ -1,29 +1,21 @@
 from Templates import game
 from kivy.uix.image import AsyncImage
-from copy import deepcopy
+import GraphicsManager
+from random import randint
+import time
 
-#---------------------------------------необходимые классы--------------------------------------------------------------
+#----------------------------------------функции игровых механик--------------------------------------------------------
 
 class Ball(AsyncImage):
-    def __init__(self):
+    def __init__(self, x, scale):
+        AsyncImage.__init__(self)
+        self.source ='Images/Ball.png'
+        self.pos = (x, -30)
+        self.size = (scale, scale * 17/12)
 
     def move(self, speed):
-        self.pos += (0, speed)
-    def draw(self, screen):
-        # Рисует сам шарик
-        circle(screen, self.color, (self.x, self.y), self.r)
-        # Рисует блик
-        for i in range(self.r):
-            circle(screen, [int(c + (255 - c) * i / self.r) for c in self.color],
-                   [self.x + int(i / 2), self.y - int(i / 2)], self.r - i)
-        # Рисует вереовчку
-        lines(screen, BLACK, False, [[self.x, self.y + self.r], [self.x, self.y + 2 * self.r]], 1)
-        # Рисует треугольник
-        polygon(screen, self.color, [
-            (self.x, self.y + self.r),
-            (self.x + int(self.r / 10), self.y + self.r + int(self.r / 10)),
-            (self.x - int(self.r / 10), self.y + self.r + int(self.r / 10)),
-        ])
+        self.pos = (self.pos[0], self.pos[1]+speed)
+
 
     def pos_inside(self, pos):
         a = pos[0] - self.x
@@ -31,26 +23,7 @@ class Ball(AsyncImage):
         return a ** 2 + b ** 2 < self.r ** 2
 
 
-def add_ball(self):
-    x = randint(int(self.screen_size[0] * 0.1), int(self.screen_size[0] * 0.9))
-    y = SCREEN_SIZE[1]
-    r = randint(10, max(10, min(self.screen_size) * 0.1))
-    color = [randint(0, 255) for _ in range(3)]
-    balls.append(Ball(x, y, r, color))
-
-    def draw(self):
-        self.screen.fill(WHITE)
-        for ball in self.balls:
-            ball.change_pos(5 + self.score / 3)
-            ball.draw(self.screen)
-        self.closeButton.draw(self.screen)
-        self.draw_score()
-        pygame.display.update()
-
     def on_click(self, pos):
-        if self.closeButton.pos_inside(pos):
-            pygame.quit()
-            exit(1)
         for ball in self.balls:
             if ball.pos_inside(pos):
                 self.balls.remove(ball)
@@ -60,21 +33,33 @@ def add_ball(self):
 #------------------------------------главные исполняющие методы---------------------------------------------------------
 
 class Balls(game):
+    def add_ball(self):
+        x = randint(0, 740)
+        scale = randint(50, 150)
+        new_ball = Ball(x, scale)
+        self.background.add_widget(new_ball)
+        self.balls.append(new_ball)
+
     def Start(self, canvas):
         # метод для открытия стартовых окон и запуска игры
         # на вход берёт kivy.uix.widget
-
+        canvas.clear_widgets()
+        self.background = GraphicsManager.background
+        canvas.add_widget(self.background)
+        GraphicsManager.create_exit_button(canvas, lambda event: game.Exit(self, canvas, self.background))
+        self.balls = []
+        self.current_time = time.time()
+        self.time_delay = 0.5
+        self.ball_speed = 1
         pass
 
     def Update(self, canvas):
-        game.draw()
-        game.add_ball()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                finished = True
-            if event.type == pygame.MOUSEBUTTONUP:
-                game.on_click(pygame.mouse.get_pos())
-        pass
+        if time.time() - self.current_time > self.time_delay:
+            self.current_time = time.time()
+            self.add_ball()
+        for ball in self.balls:
+            ball.move(self.ball_speed)
 
+Instance = Balls()
 balls = []
 score = 0

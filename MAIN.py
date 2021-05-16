@@ -3,7 +3,6 @@ from kivy.uix.widget import Widget
 from kivy.core.window import Window
 from kivy.clock import Clock
 from MainMenu import Instance as mainMenu
-from MainMenu import currentGame
 import Templates
 # собсна главный скрипт: инициализация окна и вызов команд обновления классов
 
@@ -17,7 +16,7 @@ class BaseApp(App):
         return self.canvas
 
     def update(self, *args):
-        currentGame.Update(self.root)
+        mainMenu.currentGame.Update(self.root)
         if Templates.try_to_exit == True:
             Templates.try_to_exit = False
             print("Exit successful")

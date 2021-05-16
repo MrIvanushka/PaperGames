@@ -40,5 +40,7 @@ menu_page = [AsyncImage(source='Images/viselPage.png'),
 for page in menu_page:
     page.size = (800, 600)
 
-left_arrow = Button()
+
 left_arrow_gfx = AsyncImage(source='Images/leftarrow.png')
+right_arrow_gfx = AsyncImage(source='Images/rightarrow.png')
+left_arrow_gfx.size = right_arrow_gfx.size = (80, 100)

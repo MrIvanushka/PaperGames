@@ -2,6 +2,7 @@ from kivy.uix.image import AsyncImage
 from kivy.uix.button import Button
 # хранилище изображений
 
+
 def create_button(canvas, gfx, pos):
     play_button = Button()
     play_button.size = gfx.size
@@ -21,11 +22,25 @@ def create_exit_button(canvas, func):
     exit_button.pos = exit_button_gfx.pos = (10,540)
     exit_button.bind(on_press=func)
 
+pause_button_source = ['Images/PauseButton.png', 'Images/ResumeButton.png']
+def create_pause_button(canvas, func):
+    pause_button = Button()
+    pause_button_gfx = AsyncImage(source=pause_button_source[0])
+    pause_button.size = pause_button_gfx.size = (60, 60)
+    pause_button.background_color = (1, 1, 1, 0)
+    canvas.add_widget(pause_button)
+    canvas.add_widget(pause_button_gfx)
+    pause_button.pos = pause_button_gfx.pos = (740,540)
+    pause_button.bind(on_press=func)
+
 title = AsyncImage(source='Images/title.png')
 title.size = (800, 600)
 
 play_button_gfx = AsyncImage(source='Images/playButton.png')
 play_button_gfx.size = (300, 100)
+
+start_button_gfx = AsyncImage(source='Images/Start.png')
+start_button_gfx.size = (300, 100)
 
 background = AsyncImage(source='Images/Background.png')
 background.size = (800, 600)

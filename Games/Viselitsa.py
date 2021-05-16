@@ -157,7 +157,7 @@ def set_startmessage(canvas):
     st = GraphicsManager.viselitsa_start_text
     canvas.add_widget(st)
     st.pos = (100, 160)
-    play_button = GraphicsManager.create_button(canvas, GraphicsManager.play_button_gfx, (250, 40))
+    play_button = GraphicsManager.create_button(canvas, GraphicsManager.start_button_gfx, (250, 40))
     play_button.bind(on_press=lambda event:close_startmessage(canvas))
 
 

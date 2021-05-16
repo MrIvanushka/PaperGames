@@ -59,3 +59,6 @@ for page in menu_page:
 left_arrow_gfx = AsyncImage(source='Images/leftarrow.png')
 right_arrow_gfx = AsyncImage(source='Images/rightarrow.png')
 left_arrow_gfx.size = right_arrow_gfx.size = (80, 100)
+
+record_text = AsyncImage(source = 'Images/Record.png')
+record_text.size = (300, 80)

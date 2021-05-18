@@ -5,7 +5,6 @@ from Games.Viselitsa import Instance as viselitsa
 from Games.Gun import Instance as gun
 from Games.Balls import Instance as balls
 
-
 #------------------------------------------------наследование-----------------------------------------------------------
 
 

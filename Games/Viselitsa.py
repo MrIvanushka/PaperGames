@@ -206,7 +206,7 @@ class Visel(game):
         background = GraphicsManager.background
         canvas.add_widget(background)
         set_startmessage(background)
-        GraphicsManager.create_exit_button(canvas, lambda event: game.Exit(self, canvas, background))
+        GraphicsManager.create_exit_button(canvas, lambda event: game.Exit(self, canvas, background, self.UI))
 
 
 Instance = Visel()

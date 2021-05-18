@@ -1,4 +1,4 @@
-from kivy.uix.image import AsyncImage
+from kivy.uix.image import AsyncImage, Image
 from kivy.uix.button import Button
 # хранилище изображений
 
@@ -74,4 +74,11 @@ gun.size = (150,60)
 skeleton_source = ['Images/skeleton1.png',
              'Images/skeleton2.png',
              'Images/skeleton3.png']
+boss = 'Images/SkeletonBoss.png'
 skeleton_size = [(50, 100), (50, 100), [50, 125]]
+
+HP_corners = AsyncImage(source = 'Images/HP.png')
+HP_corners.size = (500, 40)
+Hitbar = Button()
+Hitbar.background_color = (0, 0, 1, 0.5)
+Hitbar.size = (480, 35)

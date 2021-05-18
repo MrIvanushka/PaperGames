@@ -42,16 +42,16 @@ class Balls(game):
         self.background.clear_widgets()
         global game_is_started
         game_is_started = True
-        GraphicsManager.create_pause_button(self.background, lambda event: self.pause())
+        GraphicsManager.create_pause_button(self.UI, lambda event: self.pause())
         self.remaining_time = 20.0
         self.balls = []
         self.time_delay = 0.5
         self.ball_speed = 1
         self.score = -1
         self.raise_score()
-        self.background.add_widget(self.score_label)
+        self.UI.add_widget(self.score_label)
         self.score_label.pos = (100, 500)
-        self.background.add_widget(self.countdown_label)
+        self.UI.add_widget(self.countdown_label)
         self.countdown_label.pos = (600,500)
 
     def pause(self):
@@ -79,6 +79,7 @@ class Balls(game):
     def stop(self):
         global game_is_started
         game_is_started = False
+        self.UI.clear_widgets()
         self.background.clear_widgets()
         self.create_startmessage()
         if self.score > self.record:
@@ -87,6 +88,7 @@ class Balls(game):
         self.background.add_widget(self.score_label)
         self.score_label.text = text='[i] Счёт: ' + str(self.score) + '[/i]'
         self.score_label.pos = (300, 410)
+
 
     def Start(self, canvas):
         # метод для открытия стартовых окон и запуска игры
@@ -99,9 +101,9 @@ class Balls(game):
         global game_is_started
         game_is_started = False
         canvas.clear_widgets()
-        self.background = GraphicsManager.background
         canvas.add_widget(self.background)
-        GraphicsManager.create_exit_button(canvas, lambda event: game.Exit(self, canvas, self.background))
+        canvas.add_widget(self.UI)
+        GraphicsManager.create_exit_button(canvas, lambda event: game.Exit(self, canvas, self.background, self.UI))
         self.create_startmessage()
         self.current_time = time.time()
 

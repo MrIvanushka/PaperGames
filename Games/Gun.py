@@ -88,7 +88,6 @@ class Cannon:
 ########### снаряды
 
 class Bullet(AsyncImage):
-    damage = 50
     def __init__(self, canvas, pos, startY, Vx, Vy):
         AsyncImage.__init__(self, source='Images/Bullet.png')
         self.shadow = AsyncImage(source='Images/Bullet.png')
@@ -96,6 +95,7 @@ class Bullet(AsyncImage):
         self.shadow.size = (50, 20)
         self.size = (40, 40)
         self.startY = startY
+        self.damage = 20
         print(self.startY)
         self.Vx = Vx
         self.Vy = Vy
@@ -114,8 +114,9 @@ class Bullet(AsyncImage):
     def detect_collision(self):
         if  self.pos[1] - self.startY < 35:
             for target in Targets:
-                if(target.IsInRange(self.pos[0] + 25,self.pos[1] + 25, 20)):
+                if(target.IsInRange(self.pos[0] + 25, self.pos[1] + 25, 20)):
                     target.GetDamage(self.damage)
+                    self.is_alive = False
                     print("HIT!")
 
     def delete(self, canvas):
@@ -164,26 +165,28 @@ class ClickableBackground(Widget):
 class Target(AsyncImage):
     def __init__(self, canvas):
         i = randint(0, 100) % 3
-        AsyncImage.__init__(self, source=GraphicsManager.skeleton_source[i])
+        source = GraphicsManager.skeleton_source[i]
+        self.create_character(canvas, source, 10, 10, 3)
         self.size = GraphicsManager.skeleton_size[i]
         self.pos = (randint(750, 850), randint(100, 400))
+
+
+    def create_character(self, canvas, _source, Vx, hp, damage):
+        AsyncImage.__init__(self, source=_source)
         self.is_alive = True
-        self.hp = 10
-        self.Vx = 6
+        self.damage = 3
+        self.hp = hp
+        self.Vx = Vx
         canvas.add_widget(self)
 
     def move(self, dt):
-        """
-        Сдвигает шарик-мишень исходя из его кинематических характеристик
-        и длины кванта времени dt
-        в новое положение, а также меняет его скорость.
-        :param dt:
-            :return:
-        """
         self.x -= self.Vx * dt
+        if self.x < 150:
+            Instance.take_damage(self.damage)
+            self.is_alive = False
 
     def IsInRange(self, x, y, range):
-        if math.fabs(self.center_x - x) < range and math.fabs(self.pos[1] + 20 - y) < range:
+        if math.fabs(self.center_x - x) < range and (math.fabs(self.center_y - y) < self.size[1]/2 or math.fabs(self.center_y - y) < range):
             return True
         return False
 
@@ -191,6 +194,15 @@ class Target(AsyncImage):
         self.hp -= damage
         if self.hp <= 0:
             self.is_alive = False
+            Instance.raise_score()
+
+class Boss(Target):
+    def __init__(self, canvas):
+        i = randint(0, 100) % 3
+        self.create_character(canvas, GraphicsManager.boss,  3, 200, 20)
+        self.size = (90, 180)
+        self.pos = (randint(750, 850), randint(100, 400))
+        print("BOSS IS SPAWNED!")
 
 #------------------------------------главные исполняющие методы---------------------------------------------------------
 
@@ -205,9 +217,23 @@ class Gun(game):
         self.score = -1
         self.raise_score()
         self.background.add_widget(self.score_label)
-        self.score_label.pos = (100, 500)
+        self.score_label.pos = (650, 10)
         self.cannon = Cannon(self.background)
         self.background.add_widget(ClickableBackground(self.cannon))
+        self.HP = 100
+        HC = GraphicsManager.HP_corners
+        self.hitbar_gfx = GraphicsManager.Hitbar
+        self.UI.add_widget(HC)
+        self.UI.add_widget(self.hitbar_gfx)
+        HC.pos = (190, 530)
+        self.hitbar_gfx.pos = (200, 530)
+        self.boss_value = 15
+
+    def take_damage(self, damage):
+        self.HP -= damage
+        self.hitbar_gfx.size[0] = 480 * (self.HP / 100)
+        if self.HP <= 0:
+            self.stop()
 
     def pause(self):
         print("paused")
@@ -233,6 +259,7 @@ class Gun(game):
         self.frame_time = time()
         self.spawn_delay_time = time()
 
+
     def stop(self):
         global game_is_started
         game_is_started = False
@@ -252,9 +279,11 @@ class Gun(game):
         canvas.clear_widgets()
         self.background = GraphicsManager.gun_background
         canvas.add_widget(self.background)
-        GraphicsManager.create_exit_button(canvas, lambda event: game.Exit(self, canvas, self.background))
+        canvas.add_widget(self.UI)
+        GraphicsManager.create_exit_button(canvas, lambda event: game.Exit(self, canvas, self.background, self.UI))
         self.create_startmessage()
         self.spawn_delay = 3
+
 
     def Update(self, canvas):
         if game_is_started:
@@ -263,6 +292,10 @@ class Gun(game):
                 print("Spawning mob...")
                 self.spawn_delay -= 0.01
                 self.spawn_delay_time = time()
+
+            if self.score > self.boss_value:
+                Targets.append(Boss(self.background))
+                self.boss_value += 50
 
             for target in Targets:
                 target.move(time()-self.frame_time)

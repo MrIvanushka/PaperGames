@@ -113,7 +113,7 @@ class Bullet(AsyncImage):
         self.Vx = Vx
         self.Vy = Vy
         self.is_alive = True
-        -canvas.add_widget(self.shadow)
+        canvas.add_widget(self.shadow)
         canvas.add_widget(self)
 
 

@@ -30,7 +30,7 @@ def create_text(canvas, pos, letter):
 
 
 def draw_scene(canvas):
-    #отрисовка всего
+    #выбираем случайным образом слово из библиотеки нашей
     word = random.choice(library)
     wo = word[1: -1]
     word_center = []
@@ -42,7 +42,7 @@ def draw_scene(canvas):
         letter = word[i]
         if (i >= 1) and (i < 7):
             letter = '_'
-        create_text(canvas, (282 + i * 33, 500), letter)
+        create_text(canvas, (220 + i * 25, 490), letter)
 
     btn = {}
     er = []
@@ -53,25 +53,27 @@ def draw_scene(canvas):
         ind_alf = alphabet.index(v)
         key = alphabet[ind_alf]
 
+        # если буква есть в слове, то будем менять ее на 1
         if v in word_center:
 
             ind = word_center.index(v)
             b2 = list1[ind]
             word_center[ind] = '1'
 
+            #координаты, куда вписываем угаданную букву
             def krd():
                 if b2 == 1:
-                    x1, y1 = 315, 500
+                    x1, y1 = 245, 490
                 if b2 == 2:
-                    x1, y1 = 347, 500
+                    x1, y1 = 270, 490
                 if b2 == 3:
-                    x1, y1 = 380, 500
+                    x1, y1 = 295, 490
                 if b2 == 4:
-                    x1, y1 = 412, 500
+                    x1, y1 = 320, 490
                 if b2 == 5:
-                    x1, y1 = 444, 500
+                    x1, y1 = 345, 490
                 if b2 == 6:
-                    x1, y1 = 477, 500
+                    x1, y1 = 370, 490
                 return x1, y1
 
             x1, y1 = krd()
@@ -79,7 +81,7 @@ def draw_scene(canvas):
             create_text(canvas, (x1, y1), wo[ind])
             btn[key].background_color = (0, 1, 0, 1)
             #if v not in word_center:
-                #btn[key]["state"] = "disabled"
+                #btn[key] = "background_disabled_normal"
             if v in word_center:
                 win.append(v)
                 ind2 = word_center.index(v)
@@ -123,27 +125,27 @@ def draw_scene(canvas):
         canvas.add_widget(btn[u])
         btn[u].bind(on_press=lambda event: a(u))
         btn[u].pos = (x, y)
-        btn[u].size = (15, 15)
-    x = 265
-    y = 110
+        btn[u].size = (20, 20)
+    x = 270
+    y = 165
     for i in alphabet[0:8]:
         gen(i, x, y)
-        x = x+33
-    x = 265
-    y = 137
+        x = x + 23
+    x = 270
+    y = 141
     for i in alphabet[8:16]:
         gen(i, x, y)
-        x = x + 33
-    x = 265
-    y = 164
+        x = x + 23
+    x = 270
+    y = 118
     for i in alphabet[16:24]:
         gen(i, x, y)
-        x = x + 33
-    x = 265
-    y = 191
+        x = x + 23
+    x = 270
+    y = 94
     for i in alphabet[24:33]:
         gen(i, x, y)
-        x = x + 33
+        x = x + 23
     def head():
         #canvas.create_oval(79, 59, 120, 80, width=4, fill='white')
         pass

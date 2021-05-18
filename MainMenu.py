@@ -2,6 +2,7 @@ import GraphicsManager
 from Templates import game
 from kivy.uix.button import Button
 from Games.Viselitsa import Instance as viselitsa
+from Games.Gun import Instance as gun
 from Games.Balls import Instance as balls
 
 
@@ -68,4 +69,4 @@ class mainMenu(game):
 
 
 Instance = mainMenu()
-game_list = [viselitsa, balls]
+game_list = [viselitsa, balls, gun]

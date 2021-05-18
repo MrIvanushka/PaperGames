@@ -10,6 +10,7 @@ import Templates
 
 class BaseApp(App):
     def build(self):
+        self.icon = 'Images/icon.bmp'
         self.canvas = Widget()
         mainMenu.Start(self.canvas)
         Clock.schedule_interval(self.update, 0.01)

@@ -26,11 +26,11 @@ pause_button_source = ['Images/PauseButton.png', 'Images/ResumeButton.png']
 def create_pause_button(canvas, func):
     pause_button = Button()
     pause_button_gfx = AsyncImage(source=pause_button_source[0])
-    pause_button.size = pause_button_gfx.size = (60, 60)
+    pause_button.size = pause_button_gfx.size = (70, 70)
     pause_button.background_color = (1, 1, 1, 0)
     canvas.add_widget(pause_button)
     canvas.add_widget(pause_button_gfx)
-    pause_button.pos = pause_button_gfx.pos = (740,540)
+    pause_button.pos = pause_button_gfx.pos = (720,520)
     pause_button.bind(on_press=func)
 
 title = AsyncImage(source='Images/title.png')
@@ -62,3 +62,16 @@ left_arrow_gfx.size = right_arrow_gfx.size = (80, 100)
 
 record_text = AsyncImage(source = 'Images/Record.png')
 record_text.size = (300, 80)
+
+gun_background = AsyncImage(source = 'Images/pushka_background.png')
+gun_background.size = (800, 600)
+
+gun = AsyncImage(source = 'Images/gun.png')
+gun_wheels = AsyncImage(source = 'Images/gunWheels.png')
+gun_wheels.size = (80, 80)
+gun.size = (150,60)
+
+skeleton_source = ['Images/skeleton1.png',
+             'Images/skeleton2.png',
+             'Images/skeleton3.png']
+skeleton_size = [(50, 100), (50, 100), [50, 125]]

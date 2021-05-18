@@ -47,7 +47,6 @@ class Balls(game):
         self.balls = []
         self.time_delay = 0.5
         self.ball_speed = 1
-        self.record = 0
         self.score = -1
         self.raise_score()
         self.background.add_widget(self.score_label)
@@ -96,6 +95,7 @@ class Balls(game):
         self.record_label = Label(text='[i]' + str(0) + '[/i]', font_size='90sp', color=(0, 0, 0.5), markup=True)
         self.countdown_label = Label(text='[i]' + str(60) + '[/i]', font_size='90sp', color=(0, 0, 0.5),
                                   markup=True)
+        self.record = 0
         global game_is_started
         game_is_started = False
         canvas.clear_widgets()

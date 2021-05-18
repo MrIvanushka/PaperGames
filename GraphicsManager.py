@@ -82,3 +82,6 @@ HP_corners.size = (500, 40)
 Hitbar = Button()
 Hitbar.background_color = (0, 0, 1, 0.5)
 Hitbar.size = (480, 35)
+
+gun_corner = AsyncImage(source = 'Images/Corner.png')
+gun_corner.size = (100, 100)

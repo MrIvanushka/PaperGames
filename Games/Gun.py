@@ -25,8 +25,6 @@ class BulletType(Enum) :
 
 
 class Cannon:
-    max_velocity = 10
-    ChargedBulletType = BulletType.casual
     def __init__(self, canvas):
         self.canvas = canvas
         self.wheels = GraphicsManager.gun_wheels
@@ -39,6 +37,7 @@ class Cannon:
         self.cannon.pos = (40, 230)
         self.direction = 0
         self.cannon.angle = 0
+        self.ChargedBulletType = BulletType.casual
         with self.cannon.canvas.before:
             PushMatrix()
             self.cannon.rot = Rotate()
@@ -47,6 +46,15 @@ class Cannon:
             self.cannon.rot.angle = self.cannon.angle
         with self.cannon.canvas.after:
             PopMatrix()
+        Instance.weapon_button.bind(on_press=lambda event: self.change_bullet())
+
+    def change_bullet(self):
+        if self.ChargedBulletType == BulletType.casual:
+            self.ChargedBulletType = BulletType.bomb
+            Instance.current_weapon.source = 'Images/Bomb.png'
+        else:
+            self.ChargedBulletType = BulletType.casual
+            Instance.current_weapon.source = 'Images/Bullet.png'
 
     def aim(self, x, y):
         """
@@ -70,9 +78,9 @@ class Cannon:
             y = self.wheels.get_center_y() + 50 * v_y / power
 
             if self.ChargedBulletType == BulletType.bomb:
-                shell = Bomb(self.canvas, (x, y), self.wheels.pos[1] - 80, v_x, v_y)
+                shell = Bomb(self.canvas, (x, y), self.wheels.pos[1] - 50, v_x, v_y)
             else:
-                shell = Bullet(self.canvas, (x, y), self.wheels.pos[1] - 80, v_x, v_y)
+                shell = Bullet(self.canvas, (x, y), self.wheels.pos[1] - 50, v_x, v_y)
             global Bullets
             Bullets.append(shell)
 
@@ -90,12 +98,17 @@ class Cannon:
 class Bullet(AsyncImage):
     def __init__(self, canvas, pos, startY, Vx, Vy):
         AsyncImage.__init__(self, source='Images/Bullet.png')
+        self.range = 20
+        self.create_gfx(canvas, pos, startY, 20, Vx, Vy)
+
+
+    def create_gfx(self, canvas, pos, startY, damage, Vx, Vy):
         self.shadow = AsyncImage(source='Images/Bullet.png')
         self.pos = pos
         self.shadow.size = (50, 20)
         self.size = (40, 40)
         self.startY = startY
-        self.damage = 20
+        self.damage = damage
         print(self.startY)
         self.Vx = Vx
         self.Vy = Vy
@@ -114,7 +127,7 @@ class Bullet(AsyncImage):
     def detect_collision(self):
         if  self.pos[1] - self.startY < 35:
             for target in Targets:
-                if(target.IsInRange(self.pos[0] + 25, self.pos[1] + 25, 20)):
+                if(target.IsInRange(self.pos[0] + 25, self.pos[1] + 25, self.range)):
                     target.GetDamage(self.damage)
                     self.is_alive = False
                     print("HIT!")
@@ -125,14 +138,11 @@ class Bullet(AsyncImage):
 
 
 class Bomb (Bullet):
-    damage = 8
+    def __init__(self, canvas, pos, startY, Vx, Vy):
+        AsyncImage.__init__(self, source='Images/Bomb.png')
+        self.range = 80
+        self.create_gfx(canvas, pos, startY, 8, Vx, Vy)
 
-    def detect_collision(self, other):
-        if self.startY - self.y < 5:
-            for target in other:
-                if(target.IsInRange(self.x + 10,self.y + 10, 150)):
-                    target.GetDamage(self.damage)
-                    print("HIT!")
 
 
 class ClickableBackground(Widget):
@@ -186,7 +196,7 @@ class Target(AsyncImage):
             self.is_alive = False
 
     def IsInRange(self, x, y, range):
-        if math.fabs(self.center_x - x) < range and (math.fabs(self.center_y - y) < self.size[1]/2 or math.fabs(self.center_y - y) < range):
+        if math.fabs(self.center_x - x) < range and (math.fabs(self.center_y - y - 20) < self.size[1]/2 or math.fabs(self.center_y - y) < range):
             return True
         return False
 
@@ -209,6 +219,11 @@ class Boss(Target):
 class Gun(game):
     def start_game(self):
         # закрывает стартовое окно и начинает игру
+        self.weapon_button = GraphicsManager.create_button(self.UI, GraphicsManager.gun_corner, (10, 10))
+        self.current_weapon = AsyncImage(source = 'Images/Bullet.png')
+        self.current_weapon.size = (80,80)
+        self.current_weapon.pos = (20, 20)
+        self.UI.add_widget(self.current_weapon)
         self.background.clear_widgets()
         global game_is_started
         game_is_started = True
@@ -228,6 +243,7 @@ class Gun(game):
         HC.pos = (190, 530)
         self.hitbar_gfx.pos = (200, 530)
         self.boss_value = 15
+
 
     def take_damage(self, damage):
         self.HP -= damage

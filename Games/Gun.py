@@ -103,9 +103,9 @@ class Bullet(AsyncImage):
 
 
     def create_gfx(self, canvas, pos, startY, damage, Vx, Vy):
-        self.shadow = AsyncImage(source='Images/Bullet.png')
+        self.shadow = AsyncImage(source='Images/Shadow.png')
         self.pos = pos
-        self.shadow.size = (50, 20)
+        self.shadow.size = (40, 20)
         self.size = (40, 40)
         self.startY = startY
         self.damage = damage
@@ -113,8 +113,9 @@ class Bullet(AsyncImage):
         self.Vx = Vx
         self.Vy = Vy
         self.is_alive = True
+        -canvas.add_widget(self.shadow)
         canvas.add_widget(self)
-        canvas.add_widget(self.shadow)
+
 
     def move(self, dt):
         self.pos[0] += self.Vx * dt
@@ -306,7 +307,8 @@ class Gun(game):
             if time() - self.spawn_delay_time > self.spawn_delay:
                 Targets.append(Target(self.background))
                 print("Spawning mob...")
-                self.spawn_delay -= 0.01
+                if self.spawn_delay > 0.02:
+                    self.spawn_delay -= 0.01
                 self.spawn_delay_time = time()
 
             if self.score > self.boss_value:

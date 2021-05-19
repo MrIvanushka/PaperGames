@@ -24,7 +24,7 @@ library = ["аллергик", "атлетика", "апельсин", "астр
            "хлопушка", "хоккеист", "хорошист", "холостяк", "художник", "цветовод", "цыпленок", "целитель", "чиновник",
            "чёрточка", "черёмуха", "черновик", "чернозём", "черчение", "четвёрка", "чечевица", "чистовик", "чудовище",
            "шестёрка", "шнуровка", "шимпанзе", "шиповник", "школьник", "эпидемия", "эволюция", "экология", "экспресс",
-           "электрик", "электрод", "электрон", "эпицентр", "эстетика", "этикетка", "эрудиция", "языковед", ]
+           "электрик", "электрод", "электрон", "эпицентр", "эстетика", "этикетка", "эрудиция", "языковед"]
 alphabet = "aбвгдеёжзийклмнопрстуфхцчшщъыьэюя"
 
 
@@ -37,6 +37,11 @@ def create_text(canvas, pos, letter):
 
 
 def draw_scene(canvas):
+    # рисуем виселицу на фоне
+    _visel = GraphicsManager.visel
+    canvas.add_widget(_visel)
+    _visel.pos = (5, 115)
+
     # выбираем случайным образом слово из библиотеки нашей
     word = random.choice(library)
     wo = word[1: -1]
@@ -96,27 +101,32 @@ def draw_scene(canvas):
             # если все буквы угадали
             if len(win) == 6:
                 pass
-                create_text(canvas, (150, 150), 'Ты победил!')
+                create_text(canvas, (500, 355), 'Ты победил!')
+                play_button = GraphicsManager.create_button(canvas, GraphicsManager.one_more_button_gfx, (480, 300))
+                play_button.bind(on_press=lambda event: Instance.stop())
         else:
             er.append(v)
             btn[key].background_color = (1, 0, 0, 1)
+            _body = GraphicsManager.visel_body[len(er)-1]
+            canvas.add_widget(_body)
             if len(er) == 1:
-                head()
+                head(_body)
 
             elif len(er) == 2:
-                body()
+                body(_body)
 
             elif len(er) == 3:
-                arm_r()
+                #Instance.stop()
+                arm_r(_body)
 
             elif len(er) == 4:
-                arm_l()
+                arm_l(_body)
 
             elif len(er) == 5:
-                leg_l()
+                leg_l(_body)
 
             elif len(er) == 6:
-                leg_r()
+                leg_r(_body)
 
                 end()
 
@@ -149,32 +159,34 @@ def draw_scene(canvas):
         gen(i, x, y)
         x = x + 47
 
-    def head():
-        # canvas.create_oval(79, 59, 120, 80, width=4, fill='white')
+    def head(body):
+        body.pos = (245, 345)
         pass
 
-    def body():
-        # canvas.create_line(100, 80, 100, 200, width=4)
+    def body(_body):
+        _body.pos = (245, 256)
         pass
 
-    def arm_r():
-        # canvas.create_line(100, 80, 145, 100, width=4)
+    def arm_r(body):
+        body.pos = (230, 298)
         pass
 
-    def arm_l():
-        # canvas.create_line(100, 80, 45, 100, width=4)
+    def arm_l(body):
+        body.pos = (270, 280)
         pass
 
-    def leg_l():
-        # canvas.create_line(100, 200, 45, 300, width=4)
+    def leg_l(body):
+        body.pos = (237, 210)
         pass
 
-    def leg_r():
-        # canvas.create_line(100, 200, 145, 300, width=4)
+    def leg_r(body):
+        body.pos = (262, 210)
         pass
 
     def end():
-        create_text(canvas, (150, 150), 'Ты проиграл')
+        create_text(canvas, (500, 355), 'Ты проиграл')
+        play_button = GraphicsManager.create_button(canvas, GraphicsManager.one_more_button_gfx, (480, 300))
+        play_button.bind(on_press=lambda event: Instance.stop())
 
 
 def set_startmessage(canvas):
@@ -198,15 +210,17 @@ def close_startmessage(canvas):
 
 
 class Visel(game):
+    def stop(self):
+        close_startmessage(self.background)
 
     def Start(self, canvas):
         # метод для открытия стартовых окон и запуска игры
         # на вход берёт kivy.uix.widget
         canvas.clear_widgets()
-        background = GraphicsManager.background
-        canvas.add_widget(background)
-        set_startmessage(background)
-        GraphicsManager.create_exit_button(canvas, lambda event: game.Exit(self, canvas, background, self.UI))
+        self.background = GraphicsManager.background
+        canvas.add_widget(self.background)
+        set_startmessage(self.background)
+        GraphicsManager.create_exit_button(canvas, lambda event: game.Exit(self, canvas, self.background, self.UI))
 
 
 Instance = Visel()

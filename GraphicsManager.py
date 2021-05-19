@@ -45,8 +45,6 @@ start_button_gfx.size = (300, 100)
 background = AsyncImage(source='Images/Background.png')
 background.size = (800, 600)
 
-viselitsa_start_text = AsyncImage(source='Images/viselitsaStarttext.png')
-viselitsa_start_text.size = (600, 400)
 
 menu_page = [AsyncImage(source='Images/viselPage.png'),
              AsyncImage(source='Images/ballsPage.png'),
@@ -85,3 +83,22 @@ Hitbar.size = (480, 35)
 
 gun_corner = AsyncImage(source = 'Images/Corner.png')
 gun_corner.size = (100, 100)
+
+viselitsa_start_text = AsyncImage(source='Images/viselitsaStarttext.png')
+viselitsa_start_text.size = (600, 400)
+
+visel_body = [AsyncImage(source='Images/head.png'), AsyncImage(source='Images/body.png'),
+              AsyncImage(source='Images/arm_l.png'), AsyncImage(source='Images/arm_r.png'),
+              AsyncImage(source='Images/leg_l.png'), AsyncImage(source='Images/leg_r.png')]
+visel_body[0].size = (70, 70)
+visel_body[1].size = (70, 135)
+visel_body[2].size = (60, 80)
+visel_body[3].size = (60, 120)
+visel_body[4].size = (60, 100)
+visel_body[5].size = (60, 110)
+
+visel = AsyncImage(source='Images/viselitsa.png')
+visel.size = (400, 400)
+
+one_more_button_gfx = AsyncImage(source='Images/one_more.png')
+one_more_button_gfx.size = (150, 50)

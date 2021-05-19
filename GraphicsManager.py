@@ -81,6 +81,9 @@ Hitbar = Button()
 Hitbar.background_color = (0, 0, 1, 0.5)
 Hitbar.size = (480, 35)
 
+gun_corner = AsyncImage(source = 'Images/Corner.png')
+gun_corner.size = (100, 100)
+
 viselitsa_start_text = AsyncImage(source='Images/viselitsaStarttext.png')
 viselitsa_start_text.size = (600, 400)
 
@@ -99,5 +102,3 @@ visel.size = (400, 400)
 
 one_more_button_gfx = AsyncImage(source='Images/one_more.png')
 one_more_button_gfx.size = (150, 50)
-
-
